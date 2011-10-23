@@ -1,0 +1,53 @@
+#!/bin/sh
+mkdir -m 0777 /dev/block
+mknod -m 0666 /dev/block/loop0 b 7 0
+mknod -m 0666 /dev/block/loop1 b 7 1
+mknod -m 0666 /dev/block/loop2 b 7 2
+mknod -m 0666 /dev/block/mmcblk0 b 179 0
+mknod -m 0666 /dev/block/mmcblk0p1 b 179 1
+mknod -m 0666 /dev/block/mmcblk0p2 b 179 2
+mknod -m 0666 /dev/block/mmcblk0p3 b 179 3
+mknod -m 0666 /dev/block/mmcblk0p4 b 179 4
+mknod -m 0666 /dev/block/mtdblock1 b 31 1
+mknod -m 0666 /dev/block/mtdblock2 b 31 2
+mknod -m 0666 /dev/block/mtdblock3 b 31 3
+mknod -m 0666 /dev/block/mtdblock4 b 31 4
+
+mkdir -m 0777 /dev/mtd
+mknod -m 0666 /dev/mtd/mtd1 c 90 2
+mknod -m 0666 /dev/mtd/mtd2 c 90 4
+mknod -m 0666 /dev/mtd/mtd3 c 90 6
+mknod -m 0666 /dev/mtd/mtd4 c 90 8
+
+mkdir -m 0777 /dev/input
+mknod -m 0644 /dev/input/event0 c 13 64
+mknod -m 0644 /dev/input/event1 c 13 65
+mknod -m 0644 /dev/input/event2 c 13 66
+mknod -m 0644 /dev/input/event3 c 13 67
+
+mknod -m 0666 /dev/null c 1 3
+mknod -m 0444 /dev/zero c 1 5
+mknod -m 0644 /dev/ppp0 c 108 0
+mknod -m 0644 /dev/smd0 c 253 0
+mknod -m 0644 /dev/smd1 c 253 1
+
+mkdir /dev/pts
+mknod -m 0666 /dev/pts/0 c 136 0
+mknod -m 0666 /dev/pts/1 c 136 1
+mknod -m 0666 /dev/pts/2 c 136 2
+mknod -m 0666 /dev/pts/3 c 136 3
+
+mknod -m 0666 /dev/ptmx c 5 2
+mknod -m 0666 /dev/android_adb_enable c 10 48
+mknod -m 0666 /dev/android_adb c 10 49
+mknod -m 0666 /dev/ashmem c 10 52
+
+mknod -m 0666 /dev/urandom c 1 9
+mknod -m 0666 /dev/random c 1 8
+
+mkdir /dev/msm_camera 
+mknod /dev/msm_camera/control0 c 250 0
+mknod /dev/msm_camera/config0 c 250 1
+mknod /dev/msm_camera/frame0 c 250 2
+
+ifconfig lo up 127.0.0.1

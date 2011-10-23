@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if grep -q Rhodium /proc/cpuinfo
+then
+	exec /system/bin/brcm_patchram_plus -r --enable_hci --enable_lpm --baudrate 4000000 --patchram /system/etc/firmware/bcm4325.hcd /dev/ttyHS1
+else
+	exec /system/bin/hciattach -n -s 115200 /dev/ttyHS1 texasalt 4000000 flow
+fi
