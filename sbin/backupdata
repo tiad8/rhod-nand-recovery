@@ -1,0 +1,28 @@
+#!/bin/sh
+
+fail() {
+    echo "Failed"
+    echo "$1"
+    cleanup
+}
+
+cleanup() {
+umount /data
+umount /tmp
+losetup -d /dev/block/loop2
+exec sleep 3
+}
+
+if [ -f /sdcard/databackup.img ] ; then
+	rm /sdcard/databackup.img
+fi
+dd if=/dev/zero of=/sdcard/databackup.img bs=1048576 count=256
+mke2fs -F /sdcard/databackup.img > /dev/null
+losetup /dev/block/loop2 /sdcard/databackup.img
+[ $? -eq 0 ] || fail "Failed to mount"
+mount -t ext2 /dev/block/loop2 /tmp
+[ $? -eq 0 ] || fail "Failed to mount"
+cp -a /data/* /tmp
+[ $? -eq 0 ] || fail "Failed to copy"
+cleanup
+

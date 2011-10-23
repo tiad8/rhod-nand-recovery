@@ -1,0 +1,23 @@
+#!/bin/sh
+
+fail() {
+    echo "Failed"
+    echo "$1"
+    cleanup
+}
+
+cleanup() {
+umount /data
+umount /tmp
+losetup -d /dev/block/loop2
+exec sleep 3
+}
+
+losetup /dev/block/loop2 /sdcard/databackup.img
+[ $? -eq 0 ] || fail "Failed to mount"
+mount -t ext2 /dev/block/loop2 /tmp
+[ $? -eq 0 ] || fail "Failed to mount"
+cp -a /tmp/* /data
+[ $? -eq 0 ] || fail "Failed to copy"
+cleanup
+

@@ -1,0 +1,27 @@
+#!/bin/sh
+fail() {
+    echo "$1"
+    sync
+    exec sh
+}
+
+echo "Give me NAND or give me death !! -acl"
+mkdir -m 0777 /sdcard
+chmod 0755 /system
+mkdir -m 0755 /data
+chown 1000:1000 /data
+mkdir -m 0755 /cache
+chown 1000:1000 /cache
+mkdir -m 0755 /tmp
+mkdir -m 0755 /recovery
+
+#Configure Devices
+/bin/MAKEDEVS
+
+if [ "`cat /proc/bootcheck`" == "POWERON_CHARGING" ] ; then
+	echo 0 > /proc/sys/kernel/hung_task_timeout_secs
+	exec /sbin/charger
+else
+	exec /init.recovery
+fi
+

@@ -1,0 +1,52 @@
+#!/bin/sh
+
+fail() {
+    echo "Failed"
+    echo "$1"
+    cleanup
+}
+
+cleanup() {
+	echo
+	echo "Fixing Permissions on files is now Complete!"
+	echo
+	exec sleep 3
+}
+
+set_perm() {
+	chown $1:$2 $4
+	chmod $3 $4
+}
+
+set_perm_recursive() {
+	chown -R $1:$2 $5
+	chmod -R $3:$4 $5
+}
+
+echo "Fixing Permissions on files"
+echo
+
+#Data
+set_perm 1000 1000 0771 /data/app
+set_perm_recursive 1000 1000 0777 0777 /data/app
+set_perm_recursive 0 2000 0755 0755 /data/ppp
+
+#System
+set_perm_recursive 0 0 0755 0644 /system
+set_perm 1002 1002 0444 /system/etc/dbus.conf
+set_perm 0 0 0700 /system/init
+set_perm_recursive 0 2000 0755 0755 /system/bin
+set_perm_recursive 0 2000 0755 0755 /system/xbin
+set_perm 0 0 04755 /system/bin/pppd
+set_perm 0 0 04755 /system/bin/su
+set_perm 0 0 04755 /system/xbin/su
+set_perm 0 3003 02755 /system/bin/netcfg
+set_perm 0 3004 02755 /system/bin/ping
+set_perm 1014 2000 0550 /system/etc/dhcpcd/dhcpcd-run-hooks
+
+if [ -d /system/etc/wifi ]; then
+	set_perm 0 0 0755 /system/etc/wifi/loadit
+	set_perm 0 0 0755 /system/etc/wifi/wlan_loader
+fi
+
+cleanup
